@@ -2,6 +2,7 @@ package business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
 import it.mauxilium.MauxKafkaProducer.business.model.PayloadToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import it.mauxilium.MauxKafkaProducer.business.usecase.TestSessionPerformer;
 import org.junit.Test;
@@ -25,9 +26,9 @@ public class TestSessionPerformerTest {
     public void goodSetupTest() {
         TestSessionProfile profile = new TestSessionProfile(23, "TestTopic");
 
-        String setupResult = instance.setup(profile);
+        SetupStatusResult setupResult = instance.setup(profile);
 
-        Assertions.assertEquals("Test Setup successfully done", setupResult);
+        Assertions.assertEquals(SetupStatusResult.OK, setupResult);
     }
 
     @Test

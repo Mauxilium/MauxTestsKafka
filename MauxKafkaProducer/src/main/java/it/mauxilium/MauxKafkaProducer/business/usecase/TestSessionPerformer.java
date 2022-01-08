@@ -2,6 +2,7 @@ package it.mauxilium.MauxKafkaProducer.business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
 import it.mauxilium.MauxKafkaProducer.business.model.PayloadToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,24 +20,26 @@ public class TestSessionPerformer {
         this.brokerConnector = brokerConnector;
     }
 
-    public String setup(TestSessionProfile testProfile) {
+    public SetupStatusResult setup(TestSessionProfile testProfile) {
         howToSend = testProfile.getNumSampleToSend();
         destinationTopic = testProfile.getTopic();
 
         if (howToSend <= 0) {
             String response = String.format("Invalid number of messages to send, must be > 0, found: {}", howToSend);
             log.error(response);
-            return response;
+            return SetupStatusResult.INVALID_STREAM_SIZE;
         }
 
         if (destinationTopic.isEmpty()) {
             log.error("Invalid empty destination topic");
             String response = "Invalid empty destination topic";
             log.error(response);
-            return response;
+            return SetupStatusResult.INVALID_EMPTY_TOPIC_NAME;
         }
 
-        return "Test Setup successfully done";
+        // TODO insert topic name validity check (i.e. no escape chars)
+
+        return SetupStatusResult.OK;
     }
 
     public void execute() {

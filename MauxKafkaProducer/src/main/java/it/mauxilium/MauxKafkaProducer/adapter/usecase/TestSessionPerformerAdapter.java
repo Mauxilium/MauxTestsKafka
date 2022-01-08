@@ -1,6 +1,7 @@
 package it.mauxilium.MauxKafkaProducer.adapter.usecase;
 
 import it.mauxilium.MauxKafkaProducer.adapter.connector.BrokerConnectorAdapter;
+import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import it.mauxilium.MauxKafkaProducer.business.usecase.TestSessionPerformer;
 import lombok.Value;
@@ -9,16 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Value
 public class TestSessionPerformerAdapter {
+
     TestSessionPerformer testSessionPerformer;
 
     public TestSessionPerformerAdapter(BrokerConnectorAdapter brokerConnectorAdapter) {
         testSessionPerformer = new TestSessionPerformer(brokerConnectorAdapter);
     }
 
-    public String sessionSetup(int num, String topic) {
+    public SetupStatusResult sessionSetup(int num, String topic) {
         log.debug("Setup with: HowToSend={}, Topic={}", num, topic);
         TestSessionProfile profile = new TestSessionProfile(num, topic);
-        String result = testSessionPerformer.setup(profile);
+        SetupStatusResult result = testSessionPerformer.setup(profile);
         log.debug("Setup response: {}", result);
         return result;
     }

@@ -1,4 +1,4 @@
-package it.mauxilium.MauxKafkaProducer.framework.utils;
+package it.mauxilium.MauxKafkaProducer.framework.connector.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

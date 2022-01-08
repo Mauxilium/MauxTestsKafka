@@ -8,6 +8,6 @@ import lombok.Value;
 @ToString
 @AllArgsConstructor
 public class RequestModel {
-    private int numberToSend;
-    private String topic;
+    int streamSize;
+    String topic;
 }
