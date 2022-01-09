@@ -1,9 +1,11 @@
 package it.mauxilium.MauxKafkaProducer.framework.connector;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.mauxilium.MauxKafkaProducer.adapter.connector.BrokerConnectorAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.PayloadToSend;
-import it.mauxilium.MauxKafkaProducer.framework.connector.utils.KafkaEnvelopeBuilder;
 import it.mauxilium.MauxKafkaProducer.framework.exception.KafkaSerializationException;
+import it.mauxilium.MauxKafkaProducer.framework.exception.SendSampleException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,28 +21,28 @@ public class KafkaConnector implements BrokerConnectorAdapter {
     private KafkaTemplate<String, String> template;
 
     @Override
-    public boolean send(String topic, PayloadToSend payload) {
-        log.debug("ASSUMED TRANSACTION ID PREFIX: {}", template.getTransactionIdPrefix());
-
+    public void send(String topic, PayloadToSend payload) {
         try {
+            log.debug("Send to topic {} this payload: {}", topic, payload);
             ListenableFuture<SendResult<String, String>> response = template.send(topic, serializePayload(payload));
+            log.debug("Topic {} accepts payload.", topic);
         } catch (Exception ex) {
             log.error("Failure sending to topic: {}", topic, ex);
-            return false;
+            throw new SendSampleException(
+                    payload.getItemIndex(),
+                    payload.getHowToSend(),
+                    payload.getSessionId(),
+                    topic,
+                    ex.toString());
         }
-
-        return true;
     }
 
     private String serializePayload(PayloadToSend payload) {
-        String serializedPayload;
         try {
-            serializedPayload = KafkaEnvelopeBuilder.serializeEnvelopeOf(payload);
-        } catch (KafkaSerializationException e) {
+            return new ObjectMapper().writeValueAsString(payload);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException(e);
+            throw new KafkaSerializationException(e.getMessage(), payload.toString());
         }
-
-        return serializedPayload;
     }
 }

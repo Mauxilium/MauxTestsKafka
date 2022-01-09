@@ -11,6 +11,8 @@ import java.util.stream.IntStream;
 @Slf4j
 public class TestSessionPerformer {
 
+    private static final String KIBANA_PRODUCER_LOG = "PRODUCED: {}";
+
     private int sessionId = 0;
     private int howToSend = 0;
     private String destinationTopic;
@@ -48,6 +50,8 @@ public class TestSessionPerformer {
     }
 
     private void sendIndex(int indx) {
-        brokerConnector.send(destinationTopic, new PayloadToSend(indx, howToSend, destinationTopic, sessionId));
+        PayloadToSend payload = new PayloadToSend(indx, howToSend, destinationTopic, sessionId);
+        brokerConnector.send(destinationTopic, payload);
+        log.info(KIBANA_PRODUCER_LOG, payload); // This log si used by Kibana in order to populate his dashboard
     }
 }

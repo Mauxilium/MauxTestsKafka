@@ -39,13 +39,13 @@ public class SessionExecutorService {
         }
     }
 
-    public boolean sessionExecute() {
+    public String sessionExecute() {
         try {
             testSessionPerformerAdapter.sessionExecute();
         } catch (RuntimeException ex) {
             log.error("Failure sending message", ex);
-            return false;
+            return ex.toString();
         }
-        return true;
+        return "Done";
     }
 }

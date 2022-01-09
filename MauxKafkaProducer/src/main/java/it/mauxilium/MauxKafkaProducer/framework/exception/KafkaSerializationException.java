@@ -1,6 +1,6 @@
 package it.mauxilium.MauxKafkaProducer.framework.exception;
 
-public class KafkaSerializationException extends Exception {
+public class KafkaSerializationException extends RuntimeException {
 
     private final String error;
     private final String msg;

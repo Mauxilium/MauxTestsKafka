@@ -1,7 +1,20 @@
 server:
   port: 8081
 
+logging:
+  level:
+    root: INFO
+
 spring:
   application:
     name: MauxKafkaProducer
+  kafka:
+    producer:
+      bootstrap-servers: kafka:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # https://medium.com/@milo.felipe/spring-boot-kafka-transactions-97a2f653b60a
+#      transaction-id-prefix: tx-${random.uuid}
+#      enable.idempotence: true
+#      transactional.id: tran-id-1
 
