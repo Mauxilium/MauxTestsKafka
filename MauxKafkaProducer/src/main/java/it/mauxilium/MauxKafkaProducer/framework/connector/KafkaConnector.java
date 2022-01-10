@@ -3,7 +3,7 @@ package it.mauxilium.MauxKafkaProducer.framework.connector;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.mauxilium.MauxKafkaProducer.adapter.connector.BrokerConnectorAdapter;
-import it.mauxilium.MauxKafkaProducer.business.model.PayloadToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.MessageToSend;
 import it.mauxilium.MauxKafkaProducer.framework.exception.KafkaSerializationException;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SendSampleException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class KafkaConnector implements BrokerConnectorAdapter {
     private KafkaTemplate<String, String> template;
 
     @Override
-    public void send(String topic, PayloadToSend payload) {
+    public void send(String topic, MessageToSend payload) {
         try {
             log.debug("Send to topic {} this payload: {}", topic, payload);
             ListenableFuture<SendResult<String, String>> response = template.send(topic, serializePayload(payload));
@@ -37,7 +37,7 @@ public class KafkaConnector implements BrokerConnectorAdapter {
         }
     }
 
-    private String serializePayload(PayloadToSend payload) {
+    private String serializePayload(MessageToSend payload) {
         try {
             return new ObjectMapper().writeValueAsString(payload);
         } catch (JsonProcessingException e) {

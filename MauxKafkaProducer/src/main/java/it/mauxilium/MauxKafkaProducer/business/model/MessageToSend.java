@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString
 @AllArgsConstructor
-public class PayloadToSend extends TopicItem {
+public class MessageToSend extends TopicItem {
     private int itemIndex;
     private int howToSend;
     private String topic;

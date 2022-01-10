@@ -1,7 +1,7 @@
 package it.mauxilium.MauxKafkaProducer.business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
-import it.mauxilium.MauxKafkaProducer.business.model.PayloadToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.MessageToSend;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class TestSessionPerformer {
     }
 
     private void sendIndex(int indx) {
-        PayloadToSend payload = new PayloadToSend(indx, howToSend, destinationTopic, sessionId);
+        MessageToSend payload = new MessageToSend(indx, howToSend, destinationTopic, sessionId);
         brokerConnector.send(destinationTopic, payload);
         log.info(KIBANA_PRODUCER_LOG, payload); // This log si used by Kibana in order to populate his dashboard
     }
