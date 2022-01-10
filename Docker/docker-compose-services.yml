@@ -49,7 +49,7 @@ services:
     volumes:
       - ./logstash/config:/config-dir
       - ./logstash/pipeline/:/usr/share/logstash/pipeline/
-    command: logstash -f /config-dir/first-pipeline.conf
+    command: logstash -f /config-dir/kafka-pipeline.conf
     networks:
       - kafka_test
     depends_on:

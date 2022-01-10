@@ -1,0 +1,12 @@
+pipeline:
+  batch:
+    size: 125
+    delay: 5
+
+config:
+  test_and_exit: true
+  debug: true
+
+log:
+  level: info
+
