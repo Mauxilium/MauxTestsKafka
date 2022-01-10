@@ -46,7 +46,7 @@ public class TestSessionPerformer {
 
     public void execute() {
         sessionId++;
-        IntStream.range(0, howToSend).forEach(this::sendIndex);
+        IntStream.range(1, howToSend).forEach(this::sendIndex);
     }
 
     private void sendIndex(int indx) {

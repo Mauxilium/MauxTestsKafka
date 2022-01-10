@@ -2,14 +2,17 @@ package it.mauxilium.MauxKafkaProducer.framework.service;
 
 import it.mauxilium.MauxKafkaProducer.adapter.usecase.TestSessionPerformerAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
+import it.mauxilium.MauxKafkaProducer.framework.connector.KafkaConnector;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class SessionExecutorService {
 
     private static final String SETUP_OK_MSG = "Test Setup successfully done";
@@ -18,7 +21,16 @@ public class SessionExecutorService {
     private static final String SETUP_FAILS_INVALID_TOPIC_NAME_MSG = "Invalid destination topic name: %s";
     private static final String SETUP_UNKNOW_RESULT_STATUS = "Unknow setup status: %s";
 
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
     private TestSessionPerformerAdapter testSessionPerformerAdapter;
+
+    @PostConstruct
+    public void setup() {
+        KafkaConnector connector = new KafkaConnector(kafkaTemplate);
+        testSessionPerformerAdapter = new TestSessionPerformerAdapter(connector);
+    }
 
     public String sessionSetup(RequestModel requestModel) {
         SetupStatusResult response = testSessionPerformerAdapter.sessionSetup(

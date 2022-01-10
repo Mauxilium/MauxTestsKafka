@@ -6,18 +6,18 @@ import it.mauxilium.MauxKafkaProducer.adapter.connector.BrokerConnectorAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageToSend;
 import it.mauxilium.MauxKafkaProducer.framework.exception.KafkaSerializationException;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SendSampleException;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 
 @Slf4j
-@Component
+@Value
+@AllArgsConstructor
 public class KafkaConnector implements BrokerConnectorAdapter {
 
-    @Autowired
     private KafkaTemplate<String, String> template;
 
     @Override
@@ -27,13 +27,13 @@ public class KafkaConnector implements BrokerConnectorAdapter {
             ListenableFuture<SendResult<String, String>> response = template.send(topic, serializePayload(payload));
             log.debug("Topic {} accepts payload.", topic);
         } catch (Exception ex) {
-            log.error("Failure sending to topic: {}", topic, ex);
+            log.error("Failure sending to topic: {}; {}", topic, ex, ex.getCause());
             throw new SendSampleException(
                     payload.getItemIndex(),
                     payload.getHowToSend(),
                     payload.getSessionId(),
                     topic,
-                    ex.toString());
+                    ex.getLocalizedMessage()+"; "+ex.getCause());
         }
     }
 

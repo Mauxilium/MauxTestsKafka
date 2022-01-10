@@ -11,7 +11,7 @@ spring:
     name: MauxKafkaConsumer
   kafka:
     consumer:
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: localhost:9092
       group-id: group_id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

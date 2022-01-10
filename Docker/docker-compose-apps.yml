@@ -5,6 +5,7 @@ services:
     image: mauxkproducer:1.0.0
     ports:
       - 8081:8081
+
   kconsumer:
     image: mauxkconsumer:1.0.0
 
