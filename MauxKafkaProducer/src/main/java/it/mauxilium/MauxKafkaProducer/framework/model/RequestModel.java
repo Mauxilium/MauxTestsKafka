@@ -15,6 +15,9 @@ public class RequestModel {
     @NotNull
     int streamSize;
 
+    @NotNull
+    long delayMillisec;
+
     @NotBlank
     String topic;
 }

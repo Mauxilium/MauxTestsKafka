@@ -6,15 +6,19 @@ import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 @Slf4j
 public class TestSessionPerformer {
 
     private static final String KIBANA_PRODUCER_LOG = "PRODUCED: {}";
+    private static final Pattern topicNameLegalChars = Pattern.compile("[a-z0-9.-]*");
 
     private int sessionId = 0;
     private int howToSend = 0;
+    private long delayMillisec;
     private String destinationTopic;
     private final BrokerConnector brokerConnector;
 
@@ -24,6 +28,7 @@ public class TestSessionPerformer {
 
     public SetupStatusResult setup(TestSessionProfile testProfile) {
         howToSend = testProfile.getNumSampleToSend();
+        delayMillisec = testProfile.getDelayMillisec();
         destinationTopic = testProfile.getTopic();
 
         if (howToSend <= 0) {
@@ -32,26 +37,41 @@ public class TestSessionPerformer {
             return SetupStatusResult.INVALID_STREAM_SIZE;
         }
 
+        if (delayMillisec < 0) {
+            String response = String.format("Invalid number of delay between messages send, must be >= 0, found: {}", delayMillisec);
+            log.error(response);
+            return SetupStatusResult.INVALID_DELAY_VALUE;
+        }
+
         if (destinationTopic.isEmpty()) {
             log.error("Invalid empty destination topic");
-            String response = "Invalid empty destination topic";
-            log.error(response);
             return SetupStatusResult.INVALID_EMPTY_TOPIC_NAME;
         }
 
-        // TODO insert topic name validity check (i.e. no escape chars)
+        if (!topicNameLegalChars.matcher(destinationTopic).matches()) {
+            String response = "Invalid empty destination topic";
+            log.error("Invalid topic name (do not matches: [a-z0-9.-]");
+            return SetupStatusResult.INVALID_TOPIC_NAME;
+        }
 
         return SetupStatusResult.OK;
     }
 
     public void execute() {
         sessionId++;
-        IntStream.range(1, howToSend).forEach(this::sendIndex);
+        IntStream.rangeClosed(1, howToSend).forEach(this::sendIndex);
     }
 
     private void sendIndex(int indx) {
         MessageToSend payload = new MessageToSend(indx, howToSend, destinationTopic, sessionId);
-        brokerConnector.send(destinationTopic, payload);
         log.info(KIBANA_PRODUCER_LOG, payload); // This log si used by Kibana in order to populate his dashboard
+        brokerConnector.send(destinationTopic, payload);
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(delayMillisec);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            log.warn("Sleep between messages generates exception (ignored)", e);
+        }
     }
 }

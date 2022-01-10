@@ -8,7 +8,7 @@ class TestProfileTest {
 
     @Test
     public void setupTest() {
-        TestSessionProfile instance = new TestSessionProfile(111, "TestTopic");
+        TestSessionProfile instance = new TestSessionProfile(111, 1, "TestTopic");
 
         Assertions.assertEquals(111, instance.getNumSampleToSend());
         Assertions.assertEquals("TestTopic", instance.getTopic());

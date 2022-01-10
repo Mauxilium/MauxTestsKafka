@@ -17,6 +17,7 @@ public class SessionExecutorService {
 
     private static final String SETUP_OK_MSG = "Test Setup successfully done";
     private static final String SETUP_INVALID_STREAM_SIZE_MSG = "Invalid number of messages to send, must be > 0, found: %d";
+    private static final String SETUP_INVALID_DELAY_TIME_MSG = "Invalid delay between messages, must be > 0, found: %d";
     private static final String SETUP_FAILS_EMPTY_TOPIC_MSG = "Invalid empty destination topic";
     private static final String SETUP_FAILS_INVALID_TOPIC_NAME_MSG = "Invalid destination topic name: %s";
     private static final String SETUP_UNKNOW_RESULT_STATUS = "Unknow setup status: %s";
@@ -35,6 +36,7 @@ public class SessionExecutorService {
     public String sessionSetup(RequestModel requestModel) {
         SetupStatusResult response = testSessionPerformerAdapter.sessionSetup(
                 requestModel.getStreamSize(),
+                requestModel.getDelayMillisec(),
                 requestModel.getTopic());
 
         switch (response) {
@@ -42,6 +44,8 @@ public class SessionExecutorService {
                 return SETUP_OK_MSG;
             case INVALID_STREAM_SIZE:
                 return String.format(SETUP_INVALID_STREAM_SIZE_MSG, requestModel.getStreamSize());
+            case INVALID_DELAY_VALUE:
+                return String.format(SETUP_INVALID_DELAY_TIME_MSG, requestModel.getDelayMillisec());
             case INVALID_EMPTY_TOPIC_NAME:
                 return SETUP_FAILS_EMPTY_TOPIC_MSG;
             case INVALID_TOPIC_NAME:

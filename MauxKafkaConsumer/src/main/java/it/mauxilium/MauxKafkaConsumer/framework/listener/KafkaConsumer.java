@@ -15,7 +15,7 @@ public class KafkaConsumer {
         try {
             ReceivedMessageAdapterUC.consumeMessage(message);
         } catch (InvalidMessageReceivedException ex) {
-            log.error("FAILED: ", ex);  // Kibana will use this tag to populate ERROR dashbord
+            log.error("FAILED: "+ex.getLocalizedMessage()+"; "+ex.getCause(), ex);  // Kibana will use this tag to populate ERROR dashbord
         }
     }
 
