@@ -4,7 +4,9 @@ server:
 logging:
   level:
     root: INFO
-    it.mauxilium.MauxKafkaConsumer.adapter.usecase.ReceivedMessageAdapterUC: DEBUG
+    it.mauxilium.MauxKafkaConsumer.framework.jackson.DateDeserializer: INFO
+    it.mauxilium.MauxKafkaConsumer.framework.usecase.MessageFromTopicUC: INFO
+    it.mauxilium.MauxKafkaConsumer.adapter.usecase.ReceivedMessageAdapterUC: INFO
 
 spring:
   application:

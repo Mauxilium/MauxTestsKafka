@@ -5,7 +5,7 @@ pipeline:
 
 config:
   test_and_exit: true
-  debug: true
+#  debug: true
 
 log:
   level: info

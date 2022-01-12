@@ -1,7 +1,6 @@
 package it.mauxilium.MauxKafkaConsumer.framework.listener;
 
-import it.mauxilium.MauxKafkaConsumer.adapter.exception.InvalidMessageReceivedException;
-import it.mauxilium.MauxKafkaConsumer.adapter.usecase.ReceivedMessageAdapterUC;
+import it.mauxilium.MauxKafkaConsumer.framework.usecase.MessageFromTopicUC;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "SAMPLE_VALUE", groupId = "processing")
-    public void consume(String message) {
-        try {
-            ReceivedMessageAdapterUC.consumeMessage(message);
-        } catch (InvalidMessageReceivedException ex) {
-            log.error("FAILED: "+ex.getLocalizedMessage()+"; "+ex.getCause(), ex);  // Kibana will use this tag to populate ERROR dashbord
+    @KafkaListener(topics = "sample-topic", groupId = "processing")
+    public void consume(String messageFromTopic) {
+        if (MessageFromTopicUC.manageMessage.apply(messageFromTopic)) {
+            // send ack
+        } else {
+            // send nack
         }
     }
 

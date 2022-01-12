@@ -1,11 +1,12 @@
 package it.mauxilium.MauxKafkaProducer.business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
-import it.mauxilium.MauxKafkaProducer.business.model.MessageToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -13,7 +14,6 @@ import java.util.stream.IntStream;
 @Slf4j
 public class TestSessionPerformer {
 
-    private static final String KIBANA_PRODUCER_LOG = "PRODUCED: {}";
     private static final Pattern topicNameLegalChars = Pattern.compile("[a-z0-9.-]*");
 
     private int sessionId = 0;
@@ -63,8 +63,7 @@ public class TestSessionPerformer {
     }
 
     private void sendIndex(int indx) {
-        MessageToSend payload = new MessageToSend(indx, howToSend, destinationTopic, sessionId);
-        log.info(KIBANA_PRODUCER_LOG, payload); // This log si used by Kibana in order to populate his dashboard
+        MessageModel payload = new MessageModel(indx, howToSend, destinationTopic, sessionId, new Date());
         brokerConnector.send(destinationTopic, payload);
 
         try {

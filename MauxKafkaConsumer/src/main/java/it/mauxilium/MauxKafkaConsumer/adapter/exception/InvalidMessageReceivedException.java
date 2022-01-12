@@ -1,10 +1,13 @@
 package it.mauxilium.MauxKafkaConsumer.adapter.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 @ToString
-@AllArgsConstructor
 public class InvalidMessageReceivedException extends RuntimeException {
-    private String invalidBody;
+    private final String invalidBody;
+
+    public InvalidMessageReceivedException(String invalidBody, Throwable exception) {
+        super(exception);
+        this.invalidBody = invalidBody;
+    }
 }

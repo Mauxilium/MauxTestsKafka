@@ -1,7 +1,7 @@
 package business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
-import it.mauxilium.MauxKafkaProducer.business.model.MessageToSend;
+import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
 import it.mauxilium.MauxKafkaProducer.business.usecase.TestSessionPerformer;
@@ -96,7 +96,7 @@ public class TestSessionPerformerTest {
         instance.execute();
 
         Mockito.verify(brokerConnector, Mockito.times(18))
-                .send(Mockito.anyString(), Mockito.any(MessageToSend.class));
+                .send(Mockito.anyString(), Mockito.any(MessageModel.class));
     }
 
 }
