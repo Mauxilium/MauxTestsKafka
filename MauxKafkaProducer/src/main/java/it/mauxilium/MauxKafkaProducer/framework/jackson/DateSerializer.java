@@ -23,8 +23,6 @@ public class DateSerializer extends StdSerializer<Date> {
     @Override
     public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        String formattedDate = df.format(date);
-        log.info("RECEIVED DATE: {}; FORMATTED DATE: {}", date, formattedDate);
-        jsonGenerator.writeString(formattedDate);
+        jsonGenerator.writeString(df.format(date));
     }
 }

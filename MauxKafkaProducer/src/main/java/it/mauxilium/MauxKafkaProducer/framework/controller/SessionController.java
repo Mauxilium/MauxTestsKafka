@@ -5,6 +5,8 @@ import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import it.mauxilium.MauxKafkaProducer.framework.service.SessionExecutorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -17,19 +19,19 @@ public class SessionController {
 
     @PostMapping
     @Operation(summary = "Define the properties for the next test sessions")
-    public String sessionSetup(@RequestBody RequestModel requestModel) {
+    public ResponseEntity<String> sessionSetup(@RequestBody RequestModel requestModel) {
         log.debug("SESSION SETUP: {}", requestModel);
         String result = sessionExecutorService.sessionSetup(requestModel);
         log.debug("SESSION SETUP RESULT: {}", result);
-        return result;
+        return new ResponseEntity(result, HttpStatus.CREATED);
     }
 
     @GetMapping
     @Operation(summary = "Execute a new send session using the active session properties")
-    public String sessionRun() {
+    public ResponseEntity<String> sessionRun() {
         log.debug("SESSION RUN");
         String result = sessionExecutorService.sessionExecute();
         log.debug("SESSION ENDS");
-        return result;
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 }

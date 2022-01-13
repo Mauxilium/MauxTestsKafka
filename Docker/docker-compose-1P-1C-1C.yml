@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  kproducer:
+    image: mauxkproducer:1.0.0
+    ports:
+      - 8081:8081
+
+  kconsumerA:
+    image: mauxkconsumer:1.0.0
+    environment:
+      GREEN_GROUP: green_group
+          
+  kconsumerB:
+    image: mauxkconsumer:1.0.0
+    environment:
+      RED_GROUP: green_group
+
+networks:
+  default:
+    external: true
+    name: docker_kafka_test

@@ -3,6 +3,7 @@ package it.mauxilium.MauxKafkaProducer.framework.service;
 import it.mauxilium.MauxKafkaProducer.adapter.usecase.TestSessionPerformerAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.framework.connector.KafkaConnector;
+import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +40,31 @@ public class SessionExecutorService {
                 requestModel.getDelayMillisec(),
                 requestModel.getTopic());
 
-        switch (response) {
-            case OK:
-                return SETUP_OK_MSG;
-            case INVALID_STREAM_SIZE:
-                return String.format(SETUP_INVALID_STREAM_SIZE_MSG, requestModel.getStreamSize());
-            case INVALID_DELAY_VALUE:
-                return String.format(SETUP_INVALID_DELAY_TIME_MSG, requestModel.getDelayMillisec());
-            case INVALID_EMPTY_TOPIC_NAME:
-                return SETUP_FAILS_EMPTY_TOPIC_MSG;
-            case INVALID_TOPIC_NAME:
-                return String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, requestModel.getTopic());
-            default:
-                return String.format(SETUP_UNKNOW_RESULT_STATUS, response);
+        return evaluateResponse(requestModel, response);
+    }
+
+    private String evaluateResponse(RequestModel requestModel, SetupStatusResult response) {
+        if (response == SetupStatusResult.OK) {
+            return "Done";
+        } else {
+            String errorMsg;
+            switch (response) {
+                case INVALID_STREAM_SIZE:
+                    errorMsg = String.format(SETUP_INVALID_STREAM_SIZE_MSG, requestModel.getStreamSize());
+                    break;
+                case INVALID_DELAY_VALUE:
+                    errorMsg = String.format(SETUP_INVALID_DELAY_TIME_MSG, requestModel.getDelayMillisec());
+                    break;
+                case INVALID_EMPTY_TOPIC_NAME:
+                    errorMsg = SETUP_FAILS_EMPTY_TOPIC_MSG;
+                    break;
+                case INVALID_TOPIC_NAME:
+                    errorMsg = String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, requestModel.getTopic());
+                    break;
+                default:
+                    errorMsg = String.format(SETUP_UNKNOW_RESULT_STATUS, response);
+            }
+            throw new SessionSetupException(errorMsg);
         }
     }
 
