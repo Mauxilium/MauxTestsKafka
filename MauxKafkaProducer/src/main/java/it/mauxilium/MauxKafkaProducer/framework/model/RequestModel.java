@@ -20,4 +20,7 @@ public class RequestModel {
 
     @NotBlank
     String topic;
+
+    @NotNull
+    long receiverSleep;
 }

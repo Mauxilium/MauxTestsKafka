@@ -38,7 +38,8 @@ public class SessionExecutorService {
         SetupStatusResult response = testSessionPerformerAdapter.sessionSetup(
                 requestModel.getStreamSize(),
                 requestModel.getDelayMillisec(),
-                requestModel.getTopic());
+                requestModel.getTopic(),
+                requestModel.getReceiverSleep());
 
         return evaluateResponse(requestModel, response);
     }

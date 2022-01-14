@@ -1,7 +1,7 @@
 package it.mauxilium.MauxKafkaConsumer.adapter.bridge;
 
-import it.mauxilium.MauxKafkaConsumer.framework.model.MessageOnNetwork;
 import it.mauxilium.MauxKafkaConsumer.business.model.MessageModel;
+import it.mauxilium.MauxKafkaConsumer.framework.model.MessageOnNetwork;
 
 import java.util.function.Function;
 
@@ -11,5 +11,6 @@ public class ExternalToInternalMapper {
             kafkaMsg.getHowToSend(),
             kafkaMsg.getTopic(),
             kafkaMsg.getSessionId(),
-            kafkaMsg.getTimeStamp());
+            kafkaMsg.getTimeStamp(),
+            kafkaMsg.getReceiverSleepMSec());
 }

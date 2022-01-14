@@ -15,4 +15,5 @@ public class MessageModel {
     private String topic;
     private int sessionId;
     private Date timestamp;
+    private long receiverSleepMSec;
 }

@@ -20,6 +20,7 @@ public class TestSessionPerformer {
     private int howToSend = 0;
     private long delayMillisec;
     private String destinationTopic;
+    private long receiverSleepMSec;
     private final BrokerConnector brokerConnector;
 
     public TestSessionPerformer(BrokerConnector brokerConnector) {
@@ -30,6 +31,7 @@ public class TestSessionPerformer {
         howToSend = testProfile.getNumSampleToSend();
         delayMillisec = testProfile.getDelayMillisec();
         destinationTopic = testProfile.getTopic();
+        receiverSleepMSec = testProfile.getReceiverSleepMSec();
 
         if (howToSend <= 0) {
             String response = String.format("Invalid number of messages to send, must be > 0, found: {}", howToSend);
@@ -54,6 +56,12 @@ public class TestSessionPerformer {
             return SetupStatusResult.INVALID_TOPIC_NAME;
         }
 
+        if (receiverSleepMSec < 0) {
+            String response = String.format("Invalid sleep milliseconds for receiver, must be >= 0, found: {}", receiverSleepMSec);
+            log.error(response);
+            return SetupStatusResult.INVALID_RECEIVER_SLEEP_VALUE;
+        }
+
         return SetupStatusResult.OK;
     }
 
@@ -63,7 +71,7 @@ public class TestSessionPerformer {
     }
 
     private void sendIndex(int indx) {
-        MessageModel payload = new MessageModel(indx, howToSend, destinationTopic, sessionId, new Date());
+        MessageModel payload = new MessageModel(indx, howToSend, destinationTopic, sessionId, new Date(), receiverSleepMSec);
         brokerConnector.send(destinationTopic, payload);
 
         try {

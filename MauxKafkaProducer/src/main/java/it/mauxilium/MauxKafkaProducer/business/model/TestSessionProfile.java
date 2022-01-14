@@ -9,4 +9,5 @@ public class TestSessionProfile {
     int numSampleToSend;
     long delayMillisec;
     String topic;
+    long receiverSleepMSec;
 }

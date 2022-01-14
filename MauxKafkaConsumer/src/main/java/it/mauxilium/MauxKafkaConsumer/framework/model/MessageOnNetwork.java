@@ -28,4 +28,7 @@ public class MessageOnNetwork {
     @JsonAlias("sample_timestamp")
     @JsonDeserialize(using = DateDeserializer.class)
     private Date timeStamp;
+
+    @JsonAlias("receiver_sleep")
+    private long receiverSleepMSec;
 }

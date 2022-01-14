@@ -1,6 +1,6 @@
 package it.mauxilium.MauxKafkaProducer.framework.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import it.mauxilium.MauxKafkaProducer.framework.jackson.DateSerializer;
 import lombok.AllArgsConstructor;
@@ -14,18 +14,21 @@ import java.util.Date;
 @AllArgsConstructor
 public class MessageOnNetwork {
 
-    @JsonAlias("sample_index")
+    @JsonProperty("sample_index")
     int itemIndex;
 
-    @JsonAlias("stream_size")
+    @JsonProperty("stream_size")
     int howToSend;
 
     String topic;
 
-    @JsonAlias("session_index")
+    @JsonProperty("session_index")
     int sessionId;
 
-    @JsonAlias("sample_timestamp")
+    @JsonProperty("sample_timestamp")
     @JsonSerialize(using = DateSerializer.class)
     Date timeStamp;
+
+    @JsonProperty("receiver_sleep")
+    long receiverSleepMSec;
 }

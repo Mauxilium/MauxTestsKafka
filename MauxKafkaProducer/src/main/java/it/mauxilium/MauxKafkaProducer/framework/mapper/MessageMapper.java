@@ -12,6 +12,7 @@ public class MessageMapper {
             msg.getHowToSend(),
             msg.getTopic(),
             msg.getSessionId(),
-            msg.getTimestamp()
+            msg.getTimestamp(),
+            msg.getReceiverSleepMSec()
     );
 }
