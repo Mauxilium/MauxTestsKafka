@@ -1,6 +1,7 @@
 package it.mauxilium.MauxKafkaProducer.framework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import it.mauxilium.MauxKafkaProducer.framework.service.SessionExecutorService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/test")
+@Tag(name="Test Session Service", description = "Kafka producer configuration and running")
 public class SessionController {
 
     @Autowired
     private SessionExecutorService sessionExecutorService;
 
     @PostMapping
-    @Operation(summary = "Define the properties for the next test sessions")
+    @Operation(summary = "Defines the properties of test sessions")
     public ResponseEntity<String> sessionSetup(@RequestBody RequestModel requestModel) {
         log.debug("SESSION SETUP: {}", requestModel);
         String result = sessionExecutorService.sessionSetup(requestModel);
@@ -27,7 +29,7 @@ public class SessionController {
     }
 
     @GetMapping
-    @Operation(summary = "Execute a new send session using the active session properties")
+    @Operation(summary = "Executes a new send session using the 'posted' session properties")
     public ResponseEntity<String> sessionRun() {
         log.debug("SESSION RUN");
         String result = sessionExecutorService.sessionExecute();

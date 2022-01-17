@@ -8,6 +8,8 @@ services:
 
   kconsumer:
     image: mauxkconsumer:1.0.0
+    environment:
+      DEFAULT_GROUP: default_group
 
 networks:
   default:
