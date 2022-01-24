@@ -2,6 +2,7 @@ package it.mauxilium.MauxKafkaProducer.framework.service;
 
 import it.mauxilium.MauxKafkaProducer.adapter.usecase.TestSessionPerformerAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
+import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
 import it.mauxilium.MauxKafkaProducer.framework.connector.KafkaConnector;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
@@ -21,6 +22,7 @@ public class SessionExecutorService {
     private static final String SETUP_INVALID_DELAY_TIME_MSG = "Invalid delay between messages, must be > 0, found: %d";
     private static final String SETUP_FAILS_EMPTY_TOPIC_MSG = "Invalid empty destination topic";
     private static final String SETUP_FAILS_INVALID_TOPIC_NAME_MSG = "Invalid destination topic name: %s";
+    private static final String SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG = "Invalid destination topic name: %s; is not one of the expected [%s, %s]";
     private static final String SETUP_UNKNOW_RESULT_STATUS = "Unknow setup status: %s";
 
     @Autowired
@@ -61,6 +63,9 @@ public class SessionExecutorService {
                     break;
                 case INVALID_TOPIC_NAME:
                     errorMsg = String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, requestModel.getTopic());
+                    break;
+                case UNEXPECTED_TOPIC_NAME:
+                    errorMsg = String.format(SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG, requestModel.getTopic(), TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.TOPIC_TWO_PARTITIONS);
                     break;
                 default:
                     errorMsg = String.format(SETUP_UNKNOW_RESULT_STATUS, response);

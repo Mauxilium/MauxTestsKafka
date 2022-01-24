@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Value
 public class TestSessionPerformerAdapter {
 
-    TestSessionPerformer testSessionPerformer;
+    private TestSessionPerformer testSessionPerformer;
 
     public TestSessionPerformerAdapter(BrokerConnectorAdapter brokerConnectorAdapter) {
         testSessionPerformer = new TestSessionPerformer(brokerConnectorAdapter);

@@ -4,6 +4,7 @@ import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
+import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -34,14 +35,12 @@ public class TestSessionPerformer {
         receiverSleepMSec = testProfile.getReceiverSleepMSec();
 
         if (howToSend <= 0) {
-            String response = String.format("Invalid number of messages to send, must be > 0, found: {}", howToSend);
-            log.error(response);
+            log.error(String.format("Invalid number of messages to send, must be > 0, found: %s", howToSend));
             return SetupStatusResult.INVALID_STREAM_SIZE;
         }
 
         if (delayMillisec < 0) {
-            String response = String.format("Invalid number of delay between messages send, must be >= 0, found: {}", delayMillisec);
-            log.error(response);
+            log.error(String.format("Invalid number of delay between messages send, must be >= 0, found: %s", delayMillisec));
             return SetupStatusResult.INVALID_DELAY_VALUE;
         }
 
@@ -51,13 +50,19 @@ public class TestSessionPerformer {
         }
 
         if (!topicNameLegalChars.matcher(destinationTopic).matches()) {
-            String response = "Invalid empty destination topic";
             log.error("Invalid topic name (do not matches: [a-z0-9.-]");
             return SetupStatusResult.INVALID_TOPIC_NAME;
         }
 
+        if (!destinationTopic.equals(TopicsDef.TOPIC_ONE_PARTITION) &&
+                !destinationTopic.equals(TopicsDef.TOPIC_TWO_PARTITIONS)) {
+            log.error("Invalid topic name (do not matches the expected values {} or {}",
+                    TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.TOPIC_TWO_PARTITIONS);
+            return SetupStatusResult.UNEXPECTED_TOPIC_NAME;
+        }
+
         if (receiverSleepMSec < 0) {
-            String response = String.format("Invalid sleep milliseconds for receiver, must be >= 0, found: {}", receiverSleepMSec);
+            String response = String.format("Invalid sleep milliseconds for receiver, must be >= 0, found: %s", receiverSleepMSec);
             log.error(response);
             return SetupStatusResult.INVALID_RECEIVER_SLEEP_VALUE;
         }

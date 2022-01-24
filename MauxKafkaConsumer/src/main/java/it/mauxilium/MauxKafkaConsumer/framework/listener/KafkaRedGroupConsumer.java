@@ -1,6 +1,5 @@
 package it.mauxilium.MauxKafkaConsumer.framework.listener;
 
-import it.mauxilium.MauxKafkaConsumer.framework.usecase.MessageFromTopicUC;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -10,32 +9,21 @@ import javax.annotation.PostConstruct;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(value = "RED_GROUP")
-public class KafkaRedGroupConsumer {
+@ConditionalOnProperty(value = "CONSUMER_TYPE", havingValue = "red")
+public class KafkaRedGroupConsumer extends BaseConsumer {
 
     @PostConstruct
     public void setup() {
-        log.info("Created service: KafkaRedGroupConsumer");
+        log.info("Created KafkaRedGroupConsumer");
     }
 
-    @KafkaListener(topics = "sample-topic", groupId = "red-group")
-    public void sharedConsume(String messageFromTopic) {
-        log.debug("RED Group consumer receive: {}", messageFromTopic);
-        if (MessageFromTopicUC.manageMessage.apply(messageFromTopic)) {
-            // send ack
-        } else {
-            // send nack
-        }
+    @KafkaListener(topics = TopicsDef.TOPIC_ONE_PARTITION, groupId = TopicsDef.RED_GROUP)
+    public void consumeMessage(String messageFromTopic) {
+        consume(messageFromTopic, TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.RED_GROUP, "Red-p1");
     }
 
-    @KafkaListener(topics = "sample-topic2", groupId = "second-group")
-    public void consumeMultiple(String messageFromTopic) {
-        log.debug("FIRST GROUP CONSUMING: {}", messageFromTopic);
-        if (MessageFromTopicUC.manageMessage.apply(messageFromTopic)) {
-            // send ack
-        } else {
-            // send nack
-        }
+    @KafkaListener(topics = TopicsDef.TOPIC_TWO_PARTITIONS, groupId = TopicsDef.RED_GROUP)
+    public void consumeMessageTwoPartition(String messageFromTopic) {
+        consume(messageFromTopic, TopicsDef.TOPIC_TWO_PARTITIONS, TopicsDef.RED_GROUP, "Red-p2");
     }
-
 }
