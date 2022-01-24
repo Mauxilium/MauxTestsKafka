@@ -9,12 +9,12 @@ services:
   kconsumerA:
     image: mauxkconsumer:1.0.0
     environment:
-      GREEN_GROUP: green_group
+      CONSUMER_TYPE: red
           
   kconsumerB:
     image: mauxkconsumer:1.0.0
     environment:
-      RED_GROUP: green_group
+      CONSUMER_TYPE: green
 
 networks:
   default:
