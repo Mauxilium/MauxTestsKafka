@@ -4,7 +4,10 @@ server:
 logging:
   level:
     root: INFO
-    it.mauxilium.MauxKafkaConsumer.adapter.usecase.ReceivedMessageAdapterUC: DEBUG
+    it.mauxilium.MauxKafkaConsumer.framework.config.KafkaConfig: DEBUG
+    it.mauxilium.MauxKafkaConsumer.framework.jackson.DateDeserializer: INFO
+    it.mauxilium.MauxKafkaConsumer.framework.usecase.MessageFromTopicUC: INFO
+    it.mauxilium.MauxKafkaConsumer.adapter.usecase.ReceivedMessageAdapterUC: INFO
 
 spring:
   application:
@@ -12,7 +15,7 @@ spring:
   kafka:
     consumer:
       bootstrap-servers: localhost:9092
-      group-id: group_id
+      group-id: processing
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

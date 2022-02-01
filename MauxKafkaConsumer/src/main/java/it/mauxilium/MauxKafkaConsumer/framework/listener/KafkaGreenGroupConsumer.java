@@ -17,13 +17,13 @@ public class KafkaGreenGroupConsumer extends BaseConsumer {
         log.info("Created KafkaGreenGroupConsumer");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_ONE_PARTITION, groupId = TopicsDef.GREEN_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_ONE_PARTITION, groupId = KafkaDefinitions.GREEN_GROUP)
     public void consumeMessage(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.GREEN_GROUP, "Green-p1");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.GREEN_GROUP, "Green-p1");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_TWO_PARTITIONS, groupId = TopicsDef.GREEN_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_TWO_PARTITIONS, groupId = KafkaDefinitions.GREEN_GROUP)
     public void consumeMessageTwopartition(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_TWO_PARTITIONS, TopicsDef.GREEN_GROUP, "Green-p2");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_TWO_PARTITIONS, KafkaDefinitions.GREEN_GROUP, "Green-p2");
     }
 }

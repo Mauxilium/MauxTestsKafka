@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/test")
-@Tag(name="Test Session Service", description = "Kafka producer configuration and running")
+@Tag(name = "Test Session Service", description = "Kafka producer configuration and running")
 public class SessionController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class SessionController {
         log.debug("SESSION SETUP: {}", requestModel);
         String result = sessionExecutorService.sessionSetup(requestModel);
         log.debug("SESSION SETUP RESULT: {}", result);
-        return new ResponseEntity(result, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping
@@ -34,6 +34,6 @@ public class SessionController {
         log.debug("SESSION RUN");
         String result = sessionExecutorService.sessionExecute();
         log.debug("SESSION ENDS");
-        return new ResponseEntity(result, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

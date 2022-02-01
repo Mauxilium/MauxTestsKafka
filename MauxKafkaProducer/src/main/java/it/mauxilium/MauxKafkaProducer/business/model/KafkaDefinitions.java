@@ -1,6 +1,6 @@
-package it.mauxilium.MauxKafkaConsumer.framework.listener;
+package it.mauxilium.MauxKafkaProducer.business.model;
 
-public class TopicsDef {
+public class KafkaDefinitions {
 
     public static final String TOPIC_ONE_PARTITION = "sample-p1";
     public static final String TOPIC_TWO_PARTITIONS = "sample-p2";

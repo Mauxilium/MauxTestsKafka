@@ -17,13 +17,13 @@ public class KafkaRedGroupConsumer extends BaseConsumer {
         log.info("Created KafkaRedGroupConsumer");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_ONE_PARTITION, groupId = TopicsDef.RED_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_ONE_PARTITION, groupId = KafkaDefinitions.RED_GROUP)
     public void consumeMessage(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.RED_GROUP, "Red-p1");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.RED_GROUP, "Red-p1");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_TWO_PARTITIONS, groupId = TopicsDef.RED_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_TWO_PARTITIONS, groupId = KafkaDefinitions.RED_GROUP)
     public void consumeMessageTwoPartition(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_TWO_PARTITIONS, TopicsDef.RED_GROUP, "Red-p2");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_TWO_PARTITIONS, KafkaDefinitions.RED_GROUP, "Red-p2");
     }
 }

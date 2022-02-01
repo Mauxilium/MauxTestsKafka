@@ -17,13 +17,13 @@ public class KafkaWhiteGroupConsumer extends BaseConsumer {
         log.info("Created KafkaWhiteGroupConsumer");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_ONE_PARTITION, groupId = TopicsDef.WHITE_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_ONE_PARTITION, groupId = KafkaDefinitions.WHITE_GROUP)
     public void consumeMessage(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.WHITE_GROUP, "White-p1");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.WHITE_GROUP, "White-p1");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_TWO_PARTITIONS, groupId = TopicsDef.WHITE_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_TWO_PARTITIONS, groupId = KafkaDefinitions.WHITE_GROUP)
     public void consumeMessageTwoPartition(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_TWO_PARTITIONS, TopicsDef.WHITE_GROUP, "White-p2");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_TWO_PARTITIONS, KafkaDefinitions.WHITE_GROUP, "White-p2");
     }
 }

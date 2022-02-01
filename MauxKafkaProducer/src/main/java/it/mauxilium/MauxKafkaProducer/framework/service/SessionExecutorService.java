@@ -2,7 +2,7 @@ package it.mauxilium.MauxKafkaProducer.framework.service;
 
 import it.mauxilium.MauxKafkaProducer.adapter.usecase.TestSessionPerformerAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.framework.connector.KafkaConnector;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
@@ -65,7 +65,7 @@ public class SessionExecutorService {
                     errorMsg = String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, requestModel.getTopic());
                     break;
                 case UNEXPECTED_TOPIC_NAME:
-                    errorMsg = String.format(SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG, requestModel.getTopic(), TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.TOPIC_TWO_PARTITIONS);
+                    errorMsg = String.format(SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG, requestModel.getTopic(), KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.TOPIC_TWO_PARTITIONS);
                     break;
                 default:
                     errorMsg = String.format(SETUP_UNKNOW_RESULT_STATUS, response);

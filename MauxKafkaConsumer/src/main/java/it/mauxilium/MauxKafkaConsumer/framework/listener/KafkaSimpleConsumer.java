@@ -17,13 +17,13 @@ public class KafkaSimpleConsumer extends BaseConsumer {
         log.info("Created KafkaSimpleConsumer");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_ONE_PARTITION, groupId = TopicsDef.SIMPLE_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_ONE_PARTITION, groupId = KafkaDefinitions.SIMPLE_GROUP)
     public void consumeMessage(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.SIMPLE_GROUP, "Simple-p1");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.SIMPLE_GROUP, "Simple-p1");
     }
 
-    @KafkaListener(topics = TopicsDef.TOPIC_TWO_PARTITIONS, groupId = TopicsDef.SIMPLE_GROUP)
+    @KafkaListener(topics = KafkaDefinitions.TOPIC_TWO_PARTITIONS, groupId = KafkaDefinitions.SIMPLE_GROUP)
     public void consumeMessageTwoPartition(String messageFromTopic) {
-        consume(messageFromTopic, TopicsDef.TOPIC_TWO_PARTITIONS, TopicsDef.SIMPLE_GROUP, "Simple-p2");
+        consume(messageFromTopic, KafkaDefinitions.TOPIC_TWO_PARTITIONS, KafkaDefinitions.SIMPLE_GROUP, "Simple-p2");
     }
 }

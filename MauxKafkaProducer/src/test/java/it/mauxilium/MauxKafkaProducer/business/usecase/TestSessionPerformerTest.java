@@ -4,7 +4,7 @@ import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class TestSessionPerformerTest {
 
     @Test
     public void setupOk() {
-        mockSetup(1, 2, TopicsDef.TOPIC_ONE_PARTITION, 3);
+        mockSetup(1, 2, KafkaDefinitions.TOPIC_ONE_PARTITION, 3);
 
         SetupStatusResult result = instance.setup(testProfile);
 
@@ -58,7 +58,7 @@ public class TestSessionPerformerTest {
 
     @Test
     public void setup_wrongNumToSend() {
-        mockSetup(-22, 0, TopicsDef.TOPIC_ONE_PARTITION, 3);
+        mockSetup(-22, 0, KafkaDefinitions.TOPIC_ONE_PARTITION, 3);
 
         SetupStatusResult result = instance.setup(testProfile);
 
@@ -70,7 +70,7 @@ public class TestSessionPerformerTest {
 
     @Test
     public void setup_wrongSendDelay() {
-        mockSetup(6, -1, TopicsDef.TOPIC_TWO_PARTITIONS, 3);
+        mockSetup(6, -1, KafkaDefinitions.TOPIC_TWO_PARTITIONS, 3);
 
         SetupStatusResult result = instance.setup(testProfile);
 
@@ -118,7 +118,7 @@ public class TestSessionPerformerTest {
 
     @Test
     public void setup_wrongReceiverDelay() {
-        mockSetup(6, 55, TopicsDef.TOPIC_TWO_PARTITIONS, -76);
+        mockSetup(6, 55, KafkaDefinitions.TOPIC_TWO_PARTITIONS, -76);
 
         SetupStatusResult result = instance.setup(testProfile);
 
@@ -130,7 +130,7 @@ public class TestSessionPerformerTest {
 
     @Test
     public void sendMessagesOk() {
-        mockSetup(123, 55, TopicsDef.TOPIC_TWO_PARTITIONS, 7);
+        mockSetup(123, 55, KafkaDefinitions.TOPIC_TWO_PARTITIONS, 7);
 
         SetupStatusResult result = instance.setup(testProfile);
         instance.execute();

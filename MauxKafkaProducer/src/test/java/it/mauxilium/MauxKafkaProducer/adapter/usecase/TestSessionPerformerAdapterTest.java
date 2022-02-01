@@ -3,7 +3,7 @@ package it.mauxilium.MauxKafkaProducer.adapter.usecase;
 import it.mauxilium.MauxKafkaProducer.adapter.connector.BrokerConnectorAdapter;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class TestSessionPerformerAdapterTest {
 
     @Test
     public void sessionSetupOk() {
-        SetupStatusResult result = instance.sessionSetup(22, 543, TopicsDef.TOPIC_ONE_PARTITION, 55);
+        SetupStatusResult result = instance.sessionSetup(22, 543, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
         Assert.assertEquals(SetupStatusResult.OK, result);
     }
 
@@ -39,7 +39,7 @@ public class TestSessionPerformerAdapterTest {
 
     @Test
     public void sessionExecute() {
-        SetupStatusResult result = instance.sessionSetup(7, 0, TopicsDef.TOPIC_ONE_PARTITION, 0);
+        SetupStatusResult result = instance.sessionSetup(7, 0, KafkaDefinitions.TOPIC_ONE_PARTITION, 0);
         instance.sessionExecute();
 
         Mockito.verify(brokerConnectorAdapter, Mockito.times(7))

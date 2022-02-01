@@ -1,6 +1,6 @@
 package it.mauxilium.MauxKafkaProducer.framework.config;
 
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +14,10 @@ public class KafkaConfig {
 
     @Bean
     public KafkaAdmin.NewTopics topics() {
-        NewTopic topicOne = TopicBuilder.name(TopicsDef.TOPIC_ONE_PARTITION)
+        NewTopic topicOne = TopicBuilder.name(KafkaDefinitions.TOPIC_ONE_PARTITION)
                 .partitions(1)
                 .build();
-        NewTopic topicTwo = TopicBuilder.name(TopicsDef.TOPIC_TWO_PARTITIONS)
+        NewTopic topicTwo = TopicBuilder.name(KafkaDefinitions.TOPIC_TWO_PARTITIONS)
                 .partitions(2)
                 .build();
         log.info("Create two new topics: {}; {}", topicOne, topicTwo);

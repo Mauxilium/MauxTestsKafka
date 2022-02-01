@@ -4,7 +4,7 @@ import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -54,10 +54,10 @@ public class TestSessionPerformer {
             return SetupStatusResult.INVALID_TOPIC_NAME;
         }
 
-        if (!destinationTopic.equals(TopicsDef.TOPIC_ONE_PARTITION) &&
-                !destinationTopic.equals(TopicsDef.TOPIC_TWO_PARTITIONS)) {
+        if (!destinationTopic.equals(KafkaDefinitions.TOPIC_ONE_PARTITION) &&
+                !destinationTopic.equals(KafkaDefinitions.TOPIC_TWO_PARTITIONS)) {
             log.error("Invalid topic name (do not matches the expected values {} or {}",
-                    TopicsDef.TOPIC_ONE_PARTITION, TopicsDef.TOPIC_TWO_PARTITIONS);
+                    KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.TOPIC_TWO_PARTITIONS);
             return SetupStatusResult.UNEXPECTED_TOPIC_NAME;
         }
 

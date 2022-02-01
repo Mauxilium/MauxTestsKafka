@@ -1,6 +1,6 @@
 package it.mauxilium.MauxKafkaProducer.framework.service;
 
-import it.mauxilium.MauxKafkaProducer.business.model.TopicsDef;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import org.assertj.core.api.Assertions;
@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.kafka.core.KafkaTemplate;
 
@@ -35,7 +34,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void setupOk() {
-        mockSetup(3, 4, TopicsDef.TOPIC_ONE_PARTITION, 55);
+        mockSetup(3, 4, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
 
         String result = instance.sessionSetup(requestModel);
 
@@ -44,7 +43,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void setupFails_StreamSize() {
-        mockSetup(0, 4, TopicsDef.TOPIC_ONE_PARTITION, 55);
+        mockSetup(0, 4, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
 
         Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
                 .isInstanceOf(SessionSetupException.class)
@@ -53,7 +52,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void setupFails_DelayValue() {
-        mockSetup(11, -3, TopicsDef.TOPIC_ONE_PARTITION, 55);
+        mockSetup(11, -3, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
 
         Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
                 .isInstanceOf(SessionSetupException.class)
@@ -96,7 +95,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void sessionExec_FailureTest() {
-        mockSetup(11, 87, TopicsDef.TOPIC_ONE_PARTITION, 55);
+        mockSetup(11, 87, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
 
         instance.sessionSetup(requestModel);
         String response = instance.sessionExecute();
