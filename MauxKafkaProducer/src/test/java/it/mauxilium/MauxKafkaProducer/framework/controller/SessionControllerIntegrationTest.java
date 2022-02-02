@@ -1,18 +1,19 @@
 package it.mauxilium.MauxKafkaProducer.framework.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import it.mauxilium.MauxKafkaProducer.framework.service.SessionExecutorService;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,9 +21,13 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+
+@DirtiesContext
+@SpringBootTest
+@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-@WebMvcTest(SessionController.class)
-public class SessionControllerTest {
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+public class SessionControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,12 +35,11 @@ public class SessionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @Autowired
     private SessionExecutorService sessionExecutorService;
 
     @Test
-    public void sessionSetupOk() throws Exception {
-        Mockito.when(sessionExecutorService.sessionSetup(Mockito.any(RequestModel.class))).thenReturn("Done");
+    public void sessionSetupTest() throws Exception {
         RequestModel externalRequest = new RequestModel(10, 59, KafkaDefinitions.TOPIC_ONE_PARTITION, 123);
         String requestJson = objectMapper.writeValueAsString(externalRequest);
         RequestBuilder postRequest = MockMvcRequestBuilders
@@ -47,21 +51,16 @@ public class SessionControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
-        Assert.assertEquals("Done", mvcResult.getResponse().getContentAsString());
-        Mockito.verify(sessionExecutorService).sessionSetup(Mockito.any(RequestModel.class));
-        Mockito.verifyNoMoreInteractions(sessionExecutorService);
+        Assertions.assertEquals(201, mvcResult.getResponse().getStatus());
+        Assertions.assertEquals("Done", mvcResult.getResponse().getContentAsString());
     }
 
     @Test
-    public void sessionRunOk() throws Exception {
-        Mockito.when(sessionExecutorService.sessionExecute()).thenReturn("Done");
+    public void testSessionRun() throws Exception {
         RequestBuilder getRequest = MockMvcRequestBuilders.get("/test");
 
         MvcResult mvcResult = mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         Assert.assertEquals("Done", mvcResult.getResponse().getContentAsString());
-        Mockito.verify(sessionExecutorService).sessionExecute();
-        Mockito.verifyNoMoreInteractions(sessionExecutorService);
     }
-
 }
