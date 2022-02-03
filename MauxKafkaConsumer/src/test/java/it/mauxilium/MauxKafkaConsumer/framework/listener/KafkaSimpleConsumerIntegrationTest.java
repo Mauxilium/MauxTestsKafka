@@ -35,7 +35,7 @@ public class KafkaSimpleConsumerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void receiveOnTopicOne_Test() throws Exception {
+    public void receiveOnTopicOneTest() throws Exception {
         Date testDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse("2021-02-02 10:23:45.123");
         MessageOnNetwork testMsg = new MessageOnNetwork();
         testMsg.setItemIndex(1);
@@ -44,8 +44,8 @@ public class KafkaSimpleConsumerIntegrationTest {
         testMsg.setReceiverSleepMSec(54);
         testMsg.setTopic(KafkaDefinitions.TOPIC_ONE_PARTITION);
         String msgPayload = objectMapper.writeValueAsString(testMsg);
-        kafkaTemplate.send(KafkaDefinitions.TOPIC_ONE_PARTITION, msgPayload);
 
+        kafkaTemplate.send(KafkaDefinitions.TOPIC_ONE_PARTITION, msgPayload);
         testMsg.setItemIndex(2);
         kafkaTemplate.send(KafkaDefinitions.TOPIC_ONE_PARTITION, msgPayload);
 
