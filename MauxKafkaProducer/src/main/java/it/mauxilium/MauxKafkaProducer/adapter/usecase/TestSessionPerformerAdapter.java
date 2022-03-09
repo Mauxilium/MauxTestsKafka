@@ -17,9 +17,9 @@ public class TestSessionPerformerAdapter {
         testSessionPerformer = new TestSessionPerformer(brokerConnectorAdapter);
     }
 
-    public SetupStatusResult sessionSetup(int num, long delayMillisec, String topic, long receiverSleepMsec) {
+    public SetupStatusResult sessionSetup(String topic, int num, long delayMillisec, long receiverSleepMsec) {
         log.debug("Setup with: HowToSend={}, Delay(milliSec)={}, Topic={}", num, delayMillisec, topic);
-        TestSessionProfile profile = new TestSessionProfile(num, delayMillisec, topic, receiverSleepMsec);
+        TestSessionProfile profile = new TestSessionProfile(topic, num, delayMillisec, receiverSleepMsec);
         SetupStatusResult result = testSessionPerformer.setup(profile);
         log.debug("Setup response: {}", result);
         return result;

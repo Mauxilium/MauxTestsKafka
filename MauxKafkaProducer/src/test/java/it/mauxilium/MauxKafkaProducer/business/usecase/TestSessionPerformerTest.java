@@ -1,10 +1,10 @@
 package it.mauxilium.MauxKafkaProducer.business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
-import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,14 +32,12 @@ public class TestSessionPerformerTest {
     private void mockSetup(int numToSend, long sendDelay, String topic, long receiveDelay) {
         Mockito.when(testProfile.getNumSampleToSend()).thenReturn(numToSend);
         Mockito.when(testProfile.getDelayMillisec()).thenReturn(sendDelay);
-        Mockito.when(testProfile.getTopic()).thenReturn(topic);
         Mockito.when(testProfile.getReceiverSleepMSec()).thenReturn(receiveDelay);
     }
 
     private void mockVerification() {
         Mockito.verify(testProfile).getNumSampleToSend();
         Mockito.verify(testProfile).getDelayMillisec();
-        Mockito.verify(testProfile).getTopic();
         Mockito.verify(testProfile).getReceiverSleepMSec();
         Mockito.verifyNoMoreInteractions(testProfile);
     }
@@ -81,42 +79,6 @@ public class TestSessionPerformerTest {
     }
 
     @Test
-    public void setup_wrongEmptyDestinationTopic() {
-        mockSetup(6, 99, "", 3);
-
-        SetupStatusResult result = instance.setup(testProfile);
-
-        Assert.assertEquals(SetupStatusResult.INVALID_EMPTY_TOPIC_NAME, result);
-        mockVerification();
-        // Setup do not involve broker connector
-        Mockito.verifyNoMoreInteractions(brokerConnector);
-    }
-
-    @Test
-    public void setup_invalidDestinationTopic() {
-        mockSetup(6, 32, "topic_no_#", 3);
-
-        SetupStatusResult result = instance.setup(testProfile);
-
-        Assert.assertEquals(SetupStatusResult.INVALID_TOPIC_NAME, result);
-        mockVerification();
-        // Setup do not involve broker connector
-        Mockito.verifyNoMoreInteractions(brokerConnector);
-    }
-
-    @Test
-    public void setup_invalidDestinationTopicName() {
-        mockSetup(6, 623, "topic-11", 0);
-
-        SetupStatusResult result = instance.setup(testProfile);
-
-        Assert.assertEquals(SetupStatusResult.UNEXPECTED_TOPIC_NAME, result);
-        mockVerification();
-        // Setup do not involve broker connector
-        Mockito.verifyNoMoreInteractions(brokerConnector);
-    }
-
-    @Test
     public void setup_wrongReceiverDelay() {
         mockSetup(6, 55, KafkaDefinitions.TOPIC_TWO_PARTITIONS, -76);
 
@@ -135,8 +97,7 @@ public class TestSessionPerformerTest {
         SetupStatusResult result = instance.setup(testProfile);
         instance.execute();
 
-        Mockito.verify(brokerConnector, Mockito.times(123))
-                .send(Mockito.anyString(), Mockito.any(MessageModel.class));
+        Mockito.verify(brokerConnector, Mockito.times(123)).send(Mockito.anyString(), Mockito.any(MessageModel.class));
     }
 
 }

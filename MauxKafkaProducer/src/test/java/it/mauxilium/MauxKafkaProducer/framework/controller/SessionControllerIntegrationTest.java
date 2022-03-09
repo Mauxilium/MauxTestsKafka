@@ -1,7 +1,6 @@
 package it.mauxilium.MauxKafkaProducer.framework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import it.mauxilium.MauxKafkaProducer.framework.service.SessionExecutorService;
 import org.junit.Assert;
@@ -29,7 +28,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
-@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9093", "port=9093"})
 public class SessionControllerIntegrationTest {
 
     @Autowired
@@ -43,7 +42,7 @@ public class SessionControllerIntegrationTest {
 
     @Test
     public void sessionSetupTest() throws Exception {
-        RequestModel externalRequest = new RequestModel(10, 59, KafkaDefinitions.TOPIC_ONE_PARTITION, 123);
+        RequestModel externalRequest = new RequestModel(10, 59, 123);
         String requestJson = objectMapper.writeValueAsString(externalRequest);
         RequestBuilder postRequest = MockMvcRequestBuilders
                 .post("/test")

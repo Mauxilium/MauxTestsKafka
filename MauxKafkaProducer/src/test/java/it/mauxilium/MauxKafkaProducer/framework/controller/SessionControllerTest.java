@@ -36,7 +36,7 @@ public class SessionControllerTest {
     @Test
     public void sessionSetupOk() throws Exception {
         Mockito.when(sessionExecutorService.sessionSetup(Mockito.any(RequestModel.class))).thenReturn("Done");
-        RequestModel externalRequest = new RequestModel(10, 59, KafkaDefinitions.TOPIC_ONE_PARTITION, 123);
+        RequestModel externalRequest = new RequestModel(10, 59, 123);
         String requestJson = objectMapper.writeValueAsString(externalRequest);
         RequestBuilder postRequest = MockMvcRequestBuilders
                 .post("/test")

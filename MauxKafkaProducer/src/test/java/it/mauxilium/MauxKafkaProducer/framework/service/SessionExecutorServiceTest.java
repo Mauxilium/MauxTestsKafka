@@ -1,6 +1,5 @@
 package it.mauxilium.MauxKafkaProducer.framework.service;
 
-import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import org.assertj.core.api.Assertions;
@@ -11,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SessionExecutorServiceTest {
@@ -25,16 +25,17 @@ public class SessionExecutorServiceTest {
     @Before
     public void setUp() {
         instance = new SessionExecutorService();
+        ReflectionTestUtils.setField(instance, "topicName", "sample-p1"); // Utils from spring.test
         instance.setup();
     }
 
-    private void mockSetup(int streamSize, long delayMillisec, String topic, long receiverSleep) {
-        requestModel = new RequestModel(streamSize, delayMillisec, topic, receiverSleep);
+    private void mockSetup(int streamSize, long delayMillisec, long receiverSleep) {
+        requestModel = new RequestModel(streamSize, delayMillisec, receiverSleep);
     }
 
     @Test
     public void setupOk() {
-        mockSetup(3, 4, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
+        mockSetup(3, 4, 55);
 
         String result = instance.sessionSetup(requestModel);
 
@@ -43,7 +44,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void setupFails_StreamSize() {
-        mockSetup(0, 4, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
+        mockSetup(0, 4, 55);
 
         Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
                 .isInstanceOf(SessionSetupException.class)
@@ -52,38 +53,11 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void setupFails_DelayValue() {
-        mockSetup(11, -3, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
+        mockSetup(11, -3, 55);
 
         Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
                 .isInstanceOf(SessionSetupException.class)
                 .hasMessage("Invalid delay between messages, must be > 0, found: -3");
-    }
-
-    @Test
-    public void setupFails_EmptyTopic() {
-        mockSetup(11, 87, "", 55);
-
-        Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
-                .isInstanceOf(SessionSetupException.class)
-                .hasMessage("Invalid empty destination topic");
-    }
-
-    @Test
-    public void setupFails_InvalidTopic() {
-        mockSetup(11, 87, "Not_Valid_Topic_#", 55);
-
-        Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
-                .isInstanceOf(SessionSetupException.class)
-                .hasMessage("Invalid destination topic name: Not_Valid_Topic_#");
-    }
-
-    @Test
-    public void setupFails_UnexpectedTopic() {
-        mockSetup(11, 87, "unknown-topic", 55);
-
-        Assertions.assertThatThrownBy(() -> instance.sessionSetup(requestModel))
-                .isInstanceOf(SessionSetupException.class)
-                .hasMessage("Invalid destination topic name: unknown-topic; is not one of the expected [sample-p1, sample-p2]");
     }
 
     @Test
@@ -95,7 +69,7 @@ public class SessionExecutorServiceTest {
 
     @Test
     public void sessionExec_FailureTest() {
-        mockSetup(11, 87, KafkaDefinitions.TOPIC_ONE_PARTITION, 55);
+        mockSetup(11, 87, 55);
 
         instance.sessionSetup(requestModel);
         String response = instance.sessionExecute();

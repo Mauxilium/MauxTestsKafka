@@ -12,7 +12,6 @@ import java.util.Date;
 public class MessageModel {
     private int itemIndex;
     private int howToSend;
-    private String topic;
     private int sessionId;
     private Date timestamp;
     private long receiverSleepMSec;

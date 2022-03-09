@@ -1,8 +1,9 @@
 package it.mauxilium.MauxKafkaProducer.framework.config;
 
-import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
@@ -12,16 +13,25 @@ import org.springframework.kafka.core.KafkaAdmin;
 @Configuration
 public class KafkaConfig {
 
+    @Value("${TOPIC_NAME:sample-p1}")
+    private String topicName;
+
+    @Value("${TOPIC_PARTITIONS:1}")
+    private Integer topicPartitions;
+
+    @Bean
+    @Qualifier("DestinationTopicName")
+    public String getDestinationTopicName() {
+        return topicName;
+    }
+
     @Bean
     public KafkaAdmin.NewTopics topics() {
-        NewTopic topicOne = TopicBuilder.name(KafkaDefinitions.TOPIC_ONE_PARTITION)
-                .partitions(1)
+        NewTopic topicOne = TopicBuilder.name(topicName)
+                .partitions(topicPartitions)
                 .build();
-        NewTopic topicTwo = TopicBuilder.name(KafkaDefinitions.TOPIC_TWO_PARTITIONS)
-                .partitions(2)
-                .build();
-        log.info("Create two new topics: {}; {}", topicOne, topicTwo);
-        return new KafkaAdmin.NewTopics(topicOne, topicTwo);
+        log.info("Create topic: {}", topicOne);
+        return new KafkaAdmin.NewTopics(topicOne);
     }
 
 }

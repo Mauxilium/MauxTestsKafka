@@ -1,13 +1,14 @@
 package it.mauxilium.MauxKafkaProducer.framework.service;
 
 import it.mauxilium.MauxKafkaProducer.adapter.usecase.TestSessionPerformerAdapter;
-import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
+import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.framework.connector.KafkaConnector;
 import it.mauxilium.MauxKafkaProducer.framework.exception.SessionSetupException;
 import it.mauxilium.MauxKafkaProducer.framework.model.RequestModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,10 @@ public class SessionExecutorService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Autowired
+    @Qualifier("DestinationTopicName")
+    private String topicName;
+
     private TestSessionPerformerAdapter testSessionPerformerAdapter;
 
     @PostConstruct
@@ -38,9 +43,9 @@ public class SessionExecutorService {
 
     public String sessionSetup(RequestModel requestModel) {
         SetupStatusResult response = testSessionPerformerAdapter.sessionSetup(
+                topicName,
                 requestModel.getStreamSize(),
                 requestModel.getDelayMillisec(),
-                requestModel.getTopic(),
                 requestModel.getReceiverSleep());
 
         return evaluateResponse(requestModel, response);
@@ -62,10 +67,10 @@ public class SessionExecutorService {
                     errorMsg = SETUP_FAILS_EMPTY_TOPIC_MSG;
                     break;
                 case INVALID_TOPIC_NAME:
-                    errorMsg = String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, requestModel.getTopic());
+                    errorMsg = String.format(SETUP_FAILS_INVALID_TOPIC_NAME_MSG, topicName);
                     break;
                 case UNEXPECTED_TOPIC_NAME:
-                    errorMsg = String.format(SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG, requestModel.getTopic(), KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.TOPIC_TWO_PARTITIONS);
+                    errorMsg = String.format(SETUP_FAILS_UNEXPECTED_TOPIC_NAME_MSG, topicName, KafkaDefinitions.TOPIC_ONE_PARTITION, KafkaDefinitions.TOPIC_TWO_PARTITIONS);
                     break;
                 default:
                     errorMsg = String.format(SETUP_UNKNOW_RESULT_STATUS, response);

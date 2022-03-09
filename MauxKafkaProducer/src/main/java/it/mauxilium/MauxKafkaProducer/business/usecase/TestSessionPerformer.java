@@ -1,10 +1,10 @@
 package it.mauxilium.MauxKafkaProducer.business.usecase;
 
 import it.mauxilium.MauxKafkaProducer.business.connector.BrokerConnector;
+import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import it.mauxilium.MauxKafkaProducer.business.model.MessageModel;
 import it.mauxilium.MauxKafkaProducer.business.model.SetupStatusResult;
 import it.mauxilium.MauxKafkaProducer.business.model.TestSessionProfile;
-import it.mauxilium.MauxKafkaProducer.business.model.KafkaDefinitions;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -76,7 +76,7 @@ public class TestSessionPerformer {
     }
 
     private void sendIndex(int indx) {
-        MessageModel payload = new MessageModel(indx, howToSend, destinationTopic, sessionId, new Date(), receiverSleepMSec);
+        MessageModel payload = new MessageModel(indx, howToSend, sessionId, new Date(), receiverSleepMSec);
         brokerConnector.send(destinationTopic, payload);
 
         try {

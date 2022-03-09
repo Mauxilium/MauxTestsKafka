@@ -10,7 +10,6 @@ public class MessageMapper {
     public static Function<MessageModel, MessageOnNetwork> internalToExternalMapper = msg -> new MessageOnNetwork(
             msg.getItemIndex(),
             msg.getHowToSend(),
-            msg.getTopic(),
             msg.getSessionId(),
             msg.getTimestamp(),
             msg.getReceiverSleepMSec()

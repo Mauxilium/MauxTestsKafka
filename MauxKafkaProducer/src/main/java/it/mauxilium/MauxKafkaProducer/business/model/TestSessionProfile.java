@@ -6,8 +6,8 @@ import lombok.Value;
 @Value
 @AllArgsConstructor
 public class TestSessionProfile {
+    String topic;
     int numSampleToSend;
     long delayMillisec;
-    String topic;
     long receiverSleepMSec;
 }

@@ -20,8 +20,6 @@ public class MessageOnNetwork {
     @JsonProperty("stream_size")
     int howToSend;
 
-    String topic;
-
     @JsonProperty("session_index")
     int sessionId;
 

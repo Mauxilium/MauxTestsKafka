@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer-depl
+  labels:
+    app: kafka-producer-spec
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-producer
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - name: mauxkproducer
+        image: library/mauxkproducer:1.0.1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        

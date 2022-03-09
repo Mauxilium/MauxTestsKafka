@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-serv
+spec:
+  selector:
+    app: kafka-depl
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+      
